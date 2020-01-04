@@ -1,0 +1,14 @@
+#!/bin/bash
+#Author: Jacy Yu / jy529
+#Date: 10/13/19
+#Description: Accepts two file extensions to change a file with first extension with the second extension instead.
+
+if [ $# -eq 2 ] ; then
+	for file in $(ls . ) ; do
+		if [[ ${file} == *${1} ]] ; then
+			mv $file "${file%%${1}*}${2}"
+		fi
+	done
+else
+	echo "Please enter two parameters."
+fi

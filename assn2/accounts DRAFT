@@ -1,0 +1,160 @@
+#!/usr/bin/env python3
+
+#Author: Jacy Yu / jy529
+#Date: 11/19/19
+#Platform: Windows 10.0.17763 Build 17763 x64-base
+#Python 3.6.7
+#Description: accounts - 
+
+import sys
+import os
+import datetime
+
+#classes
+class Accounts():
+    def __init__(self, accNum, accOwner):
+        self.__accNum = accNum
+        self.__accOwner = accOwner
+        self.__balance = 0
+        self.__history = []
+
+    #return string of information for every transaction
+    def __str__(self):
+        info = ""
+        info += self.__accOwner + " " + self.__accNum
+        return info
+
+    #get account number
+    def getAccNum(self):
+        return self.__accNum
+
+    #get account owner name
+    def getAccOwner(self):
+        return self.__accOwner
+
+    #get account balance
+    def getBalance(self):
+        return self.__balance
+
+    #change balance / set balance
+    def setBalance(self, newBalance):
+        self.__balance = newBalance
+
+    #change / set history
+    def setHistory(self, newTransaction):
+        self.__history.append(newTransaction)
+
+class Transaction():
+    def __init__(self, date, transType, amount):
+        self.__date = date
+        self.__transType = transType
+        self.__amount = amount
+
+def sortAcc(accounts)
+    sortedAccounts = sorted(accounts.iteritems(), key = lambda x: x[1].getAccOwner, reverse = True)
+    return sortedAccounts
+
+def displayAccInfo(sortedAccounts):
+    print("Info")
+    print("----")
+    for i in (len(sortedAccounts) + 1):
+        for key in sortedAccounts:
+            print(i + 1, ")", sortedAccounts.get(key).getAccOwner(), sortedAccounts.get(key).getAccOwner())
+    print("q)uit")
+
+def chooseAcc(accNum):
+     
+
+def displayHistory(accNum):
+
+
+def doTransaction(accNum, trans, amount):
+
+
+def makeAcc():
+
+
+def menu():
+    userCommand = sys.argv[1]
+    if userCommand == "-i":
+        choice = ""
+        while choice != "q":
+            displayAccInfo()
+            choice = int(input("Enter choice =>"))
+            chooseAcc(choice)
+        sys.exit(0)
+    elif userCommand == "-h":
+        choice = ""
+        while choice != "q":
+            displayAccInfo()
+            choice = int(input("Enter choice =>"))
+            displayHistory(choice)
+        sys.exit(0)
+    elif userCommand == "-t":
+        choice = ""
+        while choice != "q":
+            displayAccInfo()
+            choice = int(input("Enter choice =>"))
+            trans = input("W or D:")
+            amount = int(input("Enter the amount:"))
+            doTransaction(choice, trans, amount)
+        sys.exit(0)
+    elif userCommand == "-?":
+        print("Type one of the following:")
+        print("1: "accounts -i" to get information on banks accounts and to display information on a certain account")
+        print("2: "accounts -h" to get information on banks accounts and to display the transaction history of a certain account")
+        print("3: "accounts -i" to get information on banks accounts and to make a transaction for a certain account")
+    elif userCommand == "q":
+        exit(0)
+    else:
+        print("Invalid command, doesn't exist.")
+
+def main():
+    fileLog = os.getenv["ACCT_LIST"]
+    log = open(fileLog, "rw")
+    accounts = {}
+
+    for line in log:
+        info = line.split(":")
+        accNum = info[0]
+        accOwner = info[1]
+
+        for key in accounts:
+            if accNum == key:
+                account = accounts.get(accNum)
+                break
+            elif accNum != key:
+                account = Account(accNum, accOwner)
+                accounts[account.getAccNum()] = account
+
+        date = info[2]
+        transType = info[3]
+        amount = info[4]
+
+        transaction = Transaction(date, transType, amount)
+        currentBalance = account.getBalance()
+
+        if transType == "D" or "d":
+            transType = "deposit"
+            newBalance = currentBalance + amount
+        elif transType == "W" or "w":
+            transType = "withdrawal"
+            newBalance = currentBalance - amount
+
+        account.setBalance(newBalance)
+        account.setHistory(transaction)
+
+    log.close()
+
+    if len(sys.argv) == 2:
+        menu()
+    elif len(sys.argv) == 1:
+        print("No command provided!")
+        sys.exit(1)
+    elif len(sys.argv) > 2:
+        print("Too many commands!")
+        sys.exit(1)
+
+
+if __name__=="main":
+    main()

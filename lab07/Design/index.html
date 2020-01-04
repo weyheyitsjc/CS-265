@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="Content-Language" content="en-us">
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta content="Kurt Schmidt &amp; Vera Zaychik" name="Author">
+	<link rel='shortcut icon' type='image/gif'
+		href='../../../images/drexel.gif'></link>
+	<script language="JavaScript" src="../../courseInfo.js"></script>
+	<script language="JavaScript" src="../../../Scripts/courseFormat.js"></script>
+	<title> Lab - Design and Implementation</title>
+	<link href="../labs.css" rel="stylesheet" type="text/css">
+</head>
+
+<body text="#330099" link="#000066" vlink="#000066" alink="#ff0000"
+	background="../../../images/blueTexture.jpeg">
+
+<h1> Lab &mdash; Design and Implementation </h1>
+
+<p> Questions will be denoted with a <b><font size="=1">Q</font></b>. </p>
+
+<ul>
+	<li> Make some appropriate subdirectory for this lab and go there </li>
+	<li> Copy (recursively) all the files from <span class="fn">~kschmidt/public_html/CS265/Labs/Design/</span> to your
+		lab directory.  Note that there is a symlink to a directory containing the C files.  You might want to read up on
+		the <span class='cmd'>-L</span> option to <span class='cmd'>cp</span> and <span class='cmd'>rsync</span> </li>
+</ul>
+
+<h2>The Markov Chain algorithm</h2>
+<ul>
+	<li> We will use a sentinel string, <span class='code'>"\n"</span> (a single newline):
+	<ul>
+		<li> The very first (2-word) prefix (<span class='code'>State</span>) to be put into the table will be <span
+			class='code'>("\n", "\n")</span> .  What follows is a suffix that would begin a text </li>
+		<ul>
+			<li> Note, there may be more than one suffix here, if we modified the program to read several input texts. </li>
+		</ul>
+		<li> The last <span class='code'>State</span> in a text will have, as a suffix, <span class='code'>"\n"</span> </li>
+		<ul>
+			<li> A "this is a fine place to stop" kind of token. </li>
+			<li> Again, if multiple texts are input, there might be several good places to end a text in the table. </li>
+		</ul>
+	</ul>
+</ul>
+
+<h2>The C implementation</h2>
+
+<ul>
+	<li> Look at markov.c </li>
+	<li> Look at the 2 structs, and the array of <tt>State</tt> pointers,
+		<tt>statetab</tt>: </li>
+		<h3><span class='code'>statetab</span></h3>
+		<ul>
+			<li> The statetab *is* your hash table. </li>
+			<li> A table of pointers to linked lists (a table of linked lists) </li>
+			<li> The linked-lists contain entries </li>
+			<li> Note, initially table is all NULL </li>
+		</ul>
+		<h3><span class='code'>struct State</span></h3>
+		<ul>
+			<li> The "buckets" are just linked-lists of <span class='code'>State</span>s </li>
+			<li> Each entry (prefix) is stored in a <span class='code'>State</span> object </li>
+			<li> Each entry (prefix) is stored exactly once in the table </li>
+		</ul>
+		<h3><span class='code'>struct Suffix</span></h3>
+		<ul>
+			<li> Each <span class='code'>State</span> is associated with one or more <i>suffices</i>
+			<li> These suffices are stored in a linked-list.  This list is a State's <i>satellite data</i>; the <span
+				class='code'>State</span> (prefix) is the key, the list is the associated data </li>
+		<li> <span class='code'>Suffix</span> is a node in this list; it stores a single suffix </li>
+	</ul>
+</ul>
+
+<h3>aTable Functions</h3>
+<ul>
+<script><!--
+	question( "What is the difference between <span class='code'>add()</span> and <span class='cmd'>addSuffix()</span>?" )
+	//--></script>
+
+<script><!--
+	question( "What does <span class='code'>lookup</span> do?  Which function(s) call <span class='code'>lookup</tt>?" )
+	//--></script>
+
+</ul>
+
+<h3>Strings</h3>
+<ul>
+	<li> Note that space is allocated for each string (single word) exactly once </li>
+	<li> Everybody maintains pointers to these things. </li>
+	<li> Consider, as input: </li>
+		<div class='file'> It's a new dawn </div>
+
+<script><!--
+	s = "Draw the state table, much as in the notes, after <span class='code'>build()</span> is called w/this input."
+	question( s )
+	//--></script>
+
+<script><!--
+	s = "How many references (pointers) are there to each string:\n"
+	s += "\t<ol type='a'>\n"
+	s += '\t\t<li> "It\'s" </li>\n'
+	s += '\t\t<li> "a" </li>\n'
+	s += '\t\t<li> "new" </li>\n'
+	s += '\t\t<li> "dawn" </li>\n'
+	s += '\t</ol>?'
+
+	question( s )
+	//--></script>
+
+<script><!--
+	question( "What are the advantages of this?" )
+	//--></script>
+
+<script><!--
+	question( "What are the drawbacks?" )
+	//--></script>
+
+	<li> Does the program explicitly give this memory back? </li>
+	<li> Wherever we have more than one reference to heap memory we have a problem </li>
+
+<script><!--
+	s = "Write a function to clean up <span class='code'>statetab</span> when\n"
+	s += "we're all done, give the memory back (don't spend a lot of time\n"
+	s += "here).  In-line your function here, in the lab sheet."
+	question( s )
+	//--></script>
+
+<script><!--
+	question( "Does your function work properly?  What difficulties did you have?" )
+	//--></script>
+
+<script><!--
+	question( "Take a step back from the table.  How could you make sure that each string was freed exactly once?" )
+	//--></script>
+</ul>
+
+<h3>The C++ Implementation</h3>
+<ul>
+	<li> Look at markov.cc </li>
+	<script><!--
+		question( "How are the prefixes stored?  Why not use a vector?" )
+		//--></script>
+
+	<script><!--
+		question( "What serves as our dictionary (replaces our hash table)?" )
+		//--></script>
+
+	<script><!--
+		question( "How is the satellite data (list of suffices) stored?" )
+		//--></script>
+
+	<script><!--
+		question( "Are there any advantages to this implementation over the C implementation?  What are they?" )
+		//--></script>
+
+	<script><!--
+question( "Are there any drawbacks?" )
+//--></script>
+</ul>
+
+<h3>The Python Implementation</h3>
+<ul>
+	<li> Look at markov.py </li>
+	<script><!--
+		question( "How are the prefixes stored?" )
+		//--></script>
+
+	<script><!--
+		question( "What serves as our dictionary (replaces our hash table)?" )
+		//--></script>
+
+	<script><!--
+		question( "How is the satellite data (list of suffices) stored?" )
+		//--></script>
+
+	<script><!--
+			question( "Are there any advantages to this implementation over the C++ implementation?  What are they?" )
+				//--></script>
+
+	<script><!--
+		question( "Are there any drawbacks?" )
+		//--></script>
+</ul>
+
+<h3>Strictly for Fun</h3>
+
+<p> You are done with your gradesheet.  Nothing more will go there.  Still need to follow these instructions, but will
+	not submit anything as a result. </p>
+
+<p> See the <span class='cmd'>fortune</span> directory (do a <span class='cmd'>man</span>; it moves around a little
+bit).  It's usually somewhere around <span class='fn'>/usr/share/games/fortune</span>. </p>
+
+<p> Modify one of the above implementations so, instead of an entire file being a "story" (a start and stop place), each
+entry in the fortunes files (separated by a <span class='code'>\n%\n</span>) is a new "story".  Pick a fortune file and
+see how it comes out.</p>
+
+<!-- We don't do Perl anymore
+<h3>The Perl Implementation</h3>
+<ul>
+	<li> Look at markov.pl </li>
+	<p><font size='+1'>Q14 How are the prefixes stored?</font></p>
+	<p><font size='+1'>Q15 What serves as our dictionary (replaces our hash
+		table)?</font></p>
+	<p><font size='+1'>Q16 How is the satellite data (list of suffices)
+		stored?</font></p>
+
+<p><font size='+1'>Q17 Which implementation makes is easiest for you to
+	understand what how a Markov chain is built/used?  Why?  (There isn't a
+	single correct answer here.)
+
+</ul>
+-->
+
+</ul>
+</body>
+</html>

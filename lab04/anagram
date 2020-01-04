@@ -1,0 +1,6 @@
+#!/bin/bash
+#Author: Jacy Yu / jy529
+#Date: 10/21/19
+
+./sign < /usr/share/dict/words | sort | awk -f squash.awk > out
+awk '{ print NF " " $0}' < out | sort -n | tail

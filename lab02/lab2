@@ -1,0 +1,42 @@
+Lab 2 answers
+
+Q1. The output is a list of all the files in my course directory that was modified 2 days ago.
+
+Q2. find . -type f -name *.bash
+
+Q3. It returns the number of lines, words, and characters in the file.
+
+Q4. ls -1 | wc -l
+
+Q5. grep "bread" breadIsDangerous.txt 
+
+Q6. grep "the" breadIsDangerous.txt | wc -l 
+
+Q7. It created another file (back up) of the original file that had the mispelled words from before it was fixed.
+
+Q8. It displays the lines that are different between the two files. The first file's line (the one typed first in the command) is before the other file's
+line (e.g. 3c3). The actual line in the file that is different is displayed below. It shows the line with the change in spelling (line 3) and the line
+that I just added to spellExample.
+
+Q9. Nothing happened because I am checking the difference between the same file. 
+
+Q10. No, it wasn't the output I expected. Instead of sorting the numbers in order (numerically), the command sorted all the numbers by their first digits
+and put it in order from smallest to largest.
+
+Q11 & 12. Yes, the output was different because of -n, the numbers were sorted as a whole number rather than the first digit and from smallest to largest.
+
+Q13. The files are sorting the 4th column (-k4) and then put in order from smallest to largest. Then -r (reverse) listed in order from largest to
+smallest file size. 
+
+Q14. du * -a | sort -n -r | head -n 8 
+
+Q15. For "grep dough breadIsDangerous.txt" it returned the line with dough in it and "echo $?" returns 0 since the command was a successful. The second
+command "grep uniqueString breadIsDangerous.txt" didn't return any lines since "uniqueString" doesn't exist in the file and "echo $?" returned 1 because the
+file exists but "uniqueString" doesn't so there was 1 error from the command.  The third command "grep dough noSuchFile" states that the file doesn't exist
+and "echo$?" returned 2 because the file didn't exist so there was 2 errors in the command.
+
+Q16. 1) e3f35b742dd86efb77da715b971c6db81af64047
+
+Q16. 2 & 4) git reset removes pending changes from the index and git reset --hard  removes all (clears all) in the index
+
+Q16. 3) git checkout dabc8d2 marlin

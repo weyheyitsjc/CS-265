@@ -1,0 +1,11 @@
+{
+	"index" : "lecs.html",
+	"required" : {
+		"files": [],
+		"directories": []
+	   },
+	"other" : {
+		"files": [],
+		"directories": []
+	   }
+}

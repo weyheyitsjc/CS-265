@@ -1,0 +1,336 @@
+#!/usr/bin/env python3
+
+'''
+Author: Jacy Yu / jy529
+Date: 11/19/19
+Platform: Windows 10.0.17763 Build 17763 x64-base
+Python 3.6.7
+Description: accounts - allows user to choose between viewing bank accounts, choosing to view all information for an account, the transaction history of an account or
+               to make a transaction for an account
+'''
+
+import sys
+import os
+from datetime import datetime
+
+#classes for account and transaction
+class Account():
+    def __init__(self, accNum, accOwner):
+        self.__accNum = accNum
+        self.__accOwner = accOwner
+        self.__balance = 0
+        self.__history = []
+
+    #get account number
+    def getAccNum(self):
+        return self.__accNum
+
+    #get account owner name
+    def getAccOwner(self):
+        return self.__accOwner
+
+    #get account balance
+    def getBalance(self):
+        return self.__balance
+    
+    #get account history
+    def getHistory(self):
+        return self.__history
+
+    #change balance / set balance
+    def setBalance(self, newBalance):
+        self.__balance = newBalance
+
+    #change / set history
+    def setHistory(self, newTransaction):
+        self.__history.append(newTransaction)
+
+class Transaction():
+    def __init__(self, date, transType, amount):
+        self.__date = date
+        self.__transType = transType
+        self.__amount = amount
+
+    #get date of transaction
+    def getDate(self):
+        return self.__date
+    
+    #get transaction type
+    def getType(self):
+        return self.__transType
+
+    #get amount for transaction
+    def getAmount(self):
+        return self.__amount
+
+#display usage message / instructions
+def menu():
+    print("Type one of the following:")
+    print("1: \"-i\" to get information on bank accounts and to display information on a certain account")
+    print("2: \"-h\" to get information on bank accounts and to display the transaction history of a certain account")
+    print("3: \"-i\" to get information on bank accounts and to make a transaction for a certain account")
+
+#display all bank accounts
+def displayAccInfo():
+    sortedAccounts = sorted(accounts.items(), key = lambda item: item[1].getAccOwner())
+    index = 1
+    for account in sortedAccounts:
+        name = account[1].getAccOwner()
+        number = str(account[0])
+
+        print(str(index) + ") " + name + " " + number)
+        index += 1
+
+#display chosen account's information
+def chooseAcc(num, accounts):
+    index = num - 1
+    account = accounts[index]
+    accNum = str(account[0])
+    account = account[1]
+    name = account.getAccOwner()
+    balance = account.getBalance()
+
+    print("\taccount #: %s \n\t     name: %s \n\t  balance: $%.2f" % (accNum, name, balance))
+
+#display chosen account's transaction history
+def displayHistory(num, accounts):
+    index = num - 1
+    account = accounts[index]
+    account = account[1]
+    transactions = account.getHistory()
+
+    i = 0
+    while i != len(transactions):
+        transaction = transactions[i]
+        date = str(transaction.getDate())
+        transType = str(transaction.getType())
+        amount = transaction.getAmount()
+
+        if transType == "D" or transType == "d":
+            transType = "deposit"
+        elif transType == "W" or transType == "w":
+            transType = "withdrawal"
+
+        print("\t%s %s $%.2f" % (date, transType, amount))
+
+        i += 1
+
+#creates new transaction object, changes balance accordingly to account, and adds to account's transaction history
+def doTransaction(transType, amount, account):
+    date = datetime.now()
+    date = date.strftime("%y.%m.%d")
+
+    accNum = account.getAccNum()
+    accOwner = account.getAccOwner()
+    amount = float(amount)
+    currentBalance = float(account.getBalance())
+
+    if transType == "D" or transType == "d":
+        transType = "D"
+        newBalance = currentBalance + amount
+    elif transType == "W" or transType == "w":
+        transType = "W"
+        newBalance = currentBalance - amount
+
+    transaction = Transaction(date, transType, amount)
+    account.setBalance(newBalance)
+    account.setHistory(transaction)
+
+    #write new transaction to the log
+    with open("backup_log", "a") as backup:
+        backup.write(accNum + ":" + accOwner + ":" + date + ":" + transType + ":" + str(amount) + "\n")
+
+#check for valid account number when for a new one
+def checkAcc(number):
+    try:
+        n = int(number)
+    except ValueError:
+        return False
+    if len(number) != 4:
+        return False
+    if number in accounts:
+        return False
+    return True
+
+def checkChoice(number):
+    try:
+        n = int(number)
+    except ValueError:
+        return False
+
+#checks for user's command and calls functions accordingly
+def commands():
+    userCommand = sys.argv[1]
+    choice = ""
+
+    if userCommand == "-i":
+        while True:
+            print("\nInfo\n----")
+            displayAccInfo()
+            print("q)uit")
+            choice = input("\nEnter choice => ")
+            if choice == "q":
+                break
+            else:
+                while checkChoice(choice) == False:
+                    if choice == "q":
+                        sys.exit(1)
+                        break
+                    else:
+                        print("\tMust be a number or quit.")
+                        choice = input("\nEnter choice => ")
+                choice = int(choice)
+                if choice in range(1, (len(sortedAccounts) + 1)):
+                    chooseAcc(choice, sortedAccounts)
+                else:
+                    print("\tAccount not a choice.\n")
+
+    elif userCommand == "-h":
+        while True:
+            print("\nHistory\n-------")
+            displayAccInfo()
+            print("q)uit")
+            choice = input("\nEnter choice => ")
+            if choice == "q":
+                break
+            else:
+                while checkChoice(choice) == False:
+                    if choice == "q":
+                        sys.exit(1)
+                        break
+                    else:
+                        print("\tMust be a number or quit.")
+                        choice = input("\nEnter choice => ")
+                choice = int(choice)
+                if choice in range(1, (len(sortedAccounts) + 1)):
+                    displayHistory(choice, sortedAccounts)
+                else:
+                    print("\tAccount not a choice.")
+
+    elif userCommand == "-t":
+        while True:
+            print("\nTransaction\n-----------")
+            displayAccInfo()
+            print(str((len(sortedAccounts)) + 1) + ") create an account")
+            print("q)uit")
+            choice = input("\nEnter choice => ")
+            if choice == "q":
+                break
+            else:
+                while checkChoice(choice) == False:
+                    if choice == "q":
+                        sys.exit(1)
+                        break
+                    else:
+                        print("\tMust be a number or quit.")
+                        choice = input("\nEnter choice => ")
+                choice = int(choice)
+                if choice in range(1, len(sortedAccounts) + 1):
+                    account = sortedAccounts[(choice - 1)]
+                    account = account[1]
+                elif choice == (len(sortedAccounts) + 1):
+                    accNum = input("\tEnter account number (must be 4 digits): ")
+                    while checkAcc(accNum) == False:
+                        print("\tMust be 4 digits and cannot exist already.")
+                        accNum = input("\tEnter account number: ")
+                    accOwner = input("\tEnter name for account: ")
+                    account = Account(accNum, accOwner)
+                    accounts[accNum] = account
+                else:
+                    print("\tAccount not a choice.")
+
+                transType = input("\tW or D:")
+
+                while True:
+                    if transType == "D" or transType == "d":
+                        break
+                    elif transType == "W" or transType == "w":
+                        break
+                    else:
+                        print("\tInvalid transaction type.")
+                        transType = input("\tW or D: ")
+
+                amount = input("\tEnter the amount: ")
+
+                while checkChoice(amount) == False:
+                    print("\tMust be a number.")
+                    amount = input("\tEnter the amount: ")
+
+                doTransaction(transType, int(amount), account)
+
+    elif userCommand == "-?":
+        print("Type one of the following: ")
+        menu()
+
+    else:
+        print("Invalid command, doesn't exist.")
+        menu()
+
+#sort all the transaction in ACCT_LIST
+def sortingLog(fileLog):
+    accounts = {}
+
+    with open(fileLog, "r") as log:
+        with open("backup_log", "w") as backup:
+            for line in log:
+                info = line.split(":")
+                accNum = info[0]
+                accOwner = info[1]
+
+                i = 1
+                findAccount = False
+                if len(accounts) >= 1:
+                    for key in accounts:
+                        if accNum == key:
+                            findAccount = True
+                            account = accounts.get(accNum)
+                            break
+                        elif accNum != key:
+                            findAccount = False
+                    if findAccount == False:
+                        account = Account(accNum, accOwner)
+                        accounts[account.getAccNum()] = account
+                else:
+                    account = Account(accNum, accOwner)
+                    accounts[account.getAccNum()] = account
+
+                date = info[2]
+                transType = info[3]
+                amount = info[4]
+                amount = float(amount.strip("\n"))
+                currentBalance = float(account.getBalance())
+
+                if transType == "D" or transType == "d":
+                    transType = "D"
+                    newBalance = currentBalance + amount
+                elif transType == "W" or transType == "w":
+                    transType = "W"
+                    newBalance = currentBalance - amount
+
+                transaction = Transaction(date, transType, amount)
+                account.setBalance(newBalance)
+                account.setHistory(transaction)
+
+                backup.write(accNum + ":" + accOwner + ":" + date + ":" + transType + ":" + str(amount) + "\n")
+    return accounts
+
+if __name__=="__main__":
+
+    #global variables
+    fileLog = os.environ["ACCT_LIST"]
+    accounts = sortingLog(fileLog)
+    sortedAccounts = sorted(accounts.items(), key = lambda item: item[1].getAccOwner())
+
+    #check validity of arguments
+    if len(sys.argv) == 2:
+        commands()
+        #overwrite ACCT_LIST with new transactions
+        os.rename("backup_log", fileLog)
+        sys.exit(0)
+    elif len(sys.argv) == 1:
+        print("No command provided!")
+        menu()
+        sys.exit(1)
+    elif len(sys.argv) > 2:
+        print("Too many commands!")
+        sys.exit(1)

@@ -1,0 +1,3 @@
+for item in $(cat blah) ; do
+	echo $item
+done

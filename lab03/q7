@@ -1,0 +1,3 @@
+cat blah | while read item ; do
+	echo $item
+done

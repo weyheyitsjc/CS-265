@@ -1,0 +1,17 @@
+#!/bin/bash
+#Author: Jacy Yu / jy529
+#Date: 10/13/19
+#Description: Finds all mp3 files in current working directory, breaks filenames into song and artist by "-", and creates a directory for the artist 
+#             (if one doesn't already exist) and puts the song file into it.
+
+for file in *.mp3 ; do
+    artist=${file%% - *};
+    song=${file#* - };
+    mv "${file}" "${song}"
+    if [ -d "${artist}" ] ; then
+        mv "${song}" "${artist}"
+    else
+         mkdir "${artist}"
+         mv "${song}" "${artist}"
+    fi 
+done        

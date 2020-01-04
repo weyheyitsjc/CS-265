@@ -1,0 +1,74 @@
+#!/bin/bash
+
+#Filename: a1-top
+#Purpose: Traverse through every subdirectory in the directory of choice and create a dir.json file in each with the contents of their README file.
+#Author: Jacy Yu / jy529
+#Date: 11/1/19
+
+if [ $# -eq 1 ] ; then
+    directory=${1}
+else
+    directory=$pwd
+fi  
+
+if [ -f ../${directory}/"dir.json" ] ; then
+    rm "dir.json"
+fi
+
+for d in $(find ${directory} -type d) ; do 
+#    echo ${d}
+    if [ -e "${d}/dir.json" ] ; then
+        rm "${d}/dir.json"
+    fi
+
+    #touch "dir.json" ${d}/dir.json
+
+    if [ -e "${d}/README" ] ; then
+        IFS=$'\n'
+        read -ra LINES < "${d}/README"
+
+        for line in "${LINES[@]}" ; do
+            if [ "${line%%:*}"=="index" ] ; then
+                index=${line#*:}
+                echo "{\n\t"index" : "${index}"," >> "${d}/README"
+            else
+                IFS=':'
+                read -ra REQUIRED < ${line}
+                if [ "${REQUIRED[0]}"=="required" ] ; then
+                    unset REQUIRED[0]
+                    files=""
+                    directories=""
+                    for f in "${REQUIRED[@]}" ; do
+                        if [ ${f}!="null" ] ; then
+                            if [ -e "${d}/${f}" ] ; then
+                                if [ -d "${d}/${f}" ] ; then
+                                    directories+=""${d}/${f}", "
+                                else
+                                    files+=""${d}/${f}", "
+                                fi
+                            fi
+                        fi
+                    done
+                elif [ "${REQUIRED[0]}"=="other" ] ; then
+                    unset REQUIRED[0]
+                    otherFiles=""
+                    otherDirectories=""
+                    for f in "${REQUIRED[@]}" ; do
+                        if [ ${f}!="null" ] ; then
+                            if [ -e "${d}/${f}" ] ; then
+                                if [ -d "${d}/${f}" ] ; then
+                                    otherDirectories+=""${d}/${f}", "
+                                else
+                                    otherFiles+=""${d}/${f}", "
+                                fi
+                            fi
+                        fi
+                    done
+                fi
+            fi
+        
+        done
+    echo "{\n\t"required" : {\n" >> "${d}/README"
+    echo "\t\t"files" : [ ${files} ]," >> "${d}/README"
+    fi
+done

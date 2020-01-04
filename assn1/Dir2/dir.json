@@ -1,0 +1,6 @@
+{
+	"other" : {
+		"files": [ "dir.json", "index.html" ],
+		"directories": [ "Files", "Labs", "Lectures" ]
+	   }
+}

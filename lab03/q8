@@ -1,0 +1,3 @@
+while read item ; do
+	echo $item
+done < blah

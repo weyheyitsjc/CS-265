@@ -1,0 +1,21 @@
+
+Lab 3 answer sheet
+
+Q1. The output is true because bash took the comparison part as a string rather than a test.
+
+Q2. The string "All we have to decide is what to do with the chocolate that is given to us..." is displayed because "&>/dev/null" is sending the grep command
+to another file and displays the line whenever it found "chocolate".
+
+Q3. The output was 2 since bash can't do floating point arithmetic natively so it rounded the answer down to 2.
+
+Q4. The output was 0 since the last command had no errors when it was executed.
+
+Q5. The first command displayed "5 12 13" and the second displayed "5 13". The first command was a command sequence and assigned x as 12 so it executed the
+$x. The second command didn't have anything assigned to x so it just displayed "5 13".
+
+Q6. It displayed all the words separated n the file "blah" ("Item\n Another\n Item") since the for loop is taking in the read file and echoing every single
+member (item) in the file. 
+
+Q7. It shows the two lines in the file, "Item" and "Another item" ("Item\n Another item") since the while loop iterates by lines in a file.
+
+Q8. It produced the same output as Q7 ("Item\n Another item").

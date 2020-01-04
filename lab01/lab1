@@ -1,0 +1,26 @@
+Lab 1 Answers
+
+Q2. There is a list of all the files in the directory with the permissions
+
+Q3. I (the owner) have the permission to read and write for the file. Everyone else (group, others) has the permission to read it
+
+Q4. I (the owner) have the permission to read, write, and execute. The group and everyone else has the permission to execute and read 
+
+Q5. Yes, I can read the funny file
+
+Q6. Yes, I can read the funny file 
+
+Q7. Not successful
+
+Q8. You can use chmod 100 or chmod u+x
+
+Q9. I can't make a change to the file because I don't have permission to write 
+
+Q10.
+ls * - It lists all of the files I have in the directory
+ls a* - It shows all the files that begin with the letter "a"
+ls *m* - It shows all the filenames with the letter "m" in it
+ls anno? - It shows the annoy file because the ? is for a character after "anno"
+ls annoy? - It says that there is no file or directory and can't access it because there is no file with "annoy" and a character after it
+
+Q11. I can't quit, there is another file. It made two files vim files at once, one "a" and the other "space". 

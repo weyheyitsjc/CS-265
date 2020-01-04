@@ -1,0 +1,6 @@
+{
+	"other" : {
+		"files": [ "file1.1", "file1.2", "file1.3", "index.html", "other4", "other5", "README", "dir.json" ],
+		"directories": []
+	   }
+}

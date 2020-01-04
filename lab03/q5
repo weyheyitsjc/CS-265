@@ -1,0 +1,3 @@
+unset x
+( x=12 ; echo "5 $x 13" )
+echo "5 $x 13"

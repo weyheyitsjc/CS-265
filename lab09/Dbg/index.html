@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<meta http-equiv="Content-Language" content="en-us">
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<meta http-equiv="Expires" content="no-expire">
+	<meta name="Author" content="Vera Zaychik & Kurt Schmidt">
+	<meta name="Publisher" content="Drexel University">
+	<meta name="Copyright" content="">
+	<meta name="Keywords" content="Programming Techniques Unix">
+	<meta name="Description" content="Lab for CS265 - Adv. Programming Techniques">
+	<meta name="Pagetype" content="Lab">
+	<meta name="Audience" content="All">
+	<link rel='shortcut icon' type='image/gif'
+		href='../../../images/drexel.gif'></link>
+	<script language="JavaScript" src="../../courseInfo.js"></script>
+	<script language="JavaScript" src="../../../Scripts/courseFormat.js"></script>
+	<title>Lab - Debugging</title>
+	<link href="../labs.css" rel="stylesheet" type="text/css">
+</head>
+
+<body text="#330099" link="#000066" vlink="#000066" alink="#ff0000"
+	background="../../../images/blueTexture.jpeg">
+
+
+<h1> Lab &mdash; Debugging </h1>
+
+<p> Questions will be denoted with a <span class='question'>Q</span>. </p>
+
+<ul>
+	<li> Make some appropriate subdirectory for this lab and go there </li>
+	<li> Copy ~kschmidt/public_html/CS265/Labs/Dbg to your lab directory </li>
+</ul>
+
+<p>See a short (and still incomplete) <a target='265ref'
+	href='http://www.cs.drexel.edu/~kschmidt/Ref/gdb_reference.html'>GDB quick
+	reference</a></p>
+
+<h3>Setup</h3>
+
+<ul>
+	<li> Make sure core files will be written (for Bash only):
+		<div class='cli'>
+			ulimit -c unlimited
+		</div>
+	 </li>
+	<li> Compile <span class='fn'>bug3.cc</span> (without debug information) </li>
+		<div class='cli'>gcc -o bug3 bug3.c</div>
+	 </li>
+	<li> Run it w/this input file:
+		<div class='cli'>./bug3 in.bug3</div>
+	</li>
+	<li> It will ask you for a string to search.  Give it one (doesn't matter if it exists in the table) </li>
+</ul>
+
+<script><!--
+	q = "What happened when you ran <span class='fn'>bug3</span>?  Use <span class='cmd'>ls -ot</span>, \
+			see if there are any new files in your directory."
+	question( q )
+	//--></script>
+
+
+<h2> Loading corefile into GDB </h2>
+
+<p> Even if you didn't compile w/the extra debug info, and you <i>don't</i> read the instructions for the given chipset,
+	the debugger can still be useful.  For example, we can use backtrace (bt) to look at the runtime stack, see in which
+	function we were when we dumped: </p>
+
+	<ul>
+		<li> Look in the directory, find a file called <span class='fn'>core</span>, or maybe
+			<span class='fn'>core.<i>nnnn</i></span> </li>
+		<li> Load the binary and the corefile into the debugger: </li>
+			<div class='cli'>$ gdb bug3 -c <i>core</i></div>
+		<li> Use GDB's <span class='cmd'>backtrace</span> command to see the stack: </li>
+			<div class='cli'>(gdb) bt</div>
+		<li> This give you a list of calls, on the stack.  The most recent is
+			on the top. </li>
+		<li> Don't leave corefiles lyin' around.  They can get pretty large
+			(look at them). </li>
+	</ul>
+
+<script><!--
+	question( "In which function did it bomb?" )
+	//--></script>
+
+	<h3> Setup </h3>
+
+	<p> To run programs in a debugger (and see stuff that looks familiar to you) you must compile all files w/the
+	<span class='cmd'>-g</span class='cmd'> flag. </p>
+
+<h2> Running programs inside GDB </h2>
+
+	<script><!--
+		question( "Okay, now, use GDB to debug these other programs." )
+		//--></script>
+
+	<p> For each, below, record what the problem was, and how you fixed it. </p>
+
+<ol type='a'>
+	<li>  <strike><span class='fn'>bug1.c</span> - common bug in C.</strike> <font color='red'>OBE by compiler</font>  </li>
+	<li>  <strike><span class='fn'>bug2.c</span> - common bug in C.</strike> <font color='red'>OBE by compiler</font>  </li>
+	<li>  <span class='fn'>bug3.c</span> &ndash; when tested with <span class='fn'>in.bug3</b></tt>
+		as input  </li>
+	<li>  <strike><span class='fn'>avg.c</span> - example use of assert.</strike> <font color='red'>Not this
+			term.</font>
+	</li>
+	<li>  Look at the program in <span class='fn'>Labs/Dbg/Calc</span>, a postfix calculator ( <span
+		class='cmd'>=</span> commands the calculator to print the value on the top of the stack ) which reads <span
+		class='fn'>stdin</span> .
+
+		<p> To compile: </p>
+
+		<div class='cli'>gcc -g *.c</div>
+
+		<p> There are some sample expressions in <span class='fn'>input</span>.  Verify that the calculator works correctly
+			on all.  (It does not.)  Load it into the debugger, devise some simple input that makes it misbehave, and try to
+			diagnose the problem. </p>
+	 </li>
+
+	<li> A program that causes a segmentation violation: 
+		<p> <span class='fn'>driverBug.c</span> compiled with
+		<span class='fn'>quicksortBug.c</span>. </p>
+	</li>
+
+	<p> simple bug in the quicksort program from the text &ndash; how would you find it?  What assertions could you put
+		into the code to check that the algorithm was implemented properly? </p>
+
+	<p>To generate the error run <span class='fn'>driverBug</span> with the input <span class='fn'>in</span> </p>
+</ol>
+
+<p> <span class='fn'>sort2.c</span> uses qsort to sort an array of strings.  The error comes from passing qsort a
+	function to compare integers rather than strings. </p>
+	
+	<script><!--
+		q = "Why can't the compiler catch this?  You can uncover the problem by looking at a stack trace \
+				from when the program crashed (see the lab on how to do this). "
+		question( q )
+	//--></script>
+
+	<script><!--
+		q = "What happens if you are using qsort to sort integers and accidently pass the string comparison function?"
+		question( q )
+	//--></script>
+
+</body>
+</html>

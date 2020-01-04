@@ -1,0 +1,63 @@
+Lab 7 answer sheet
+
+Q1) add() adds a prefix to the hash tables. The addsuffix is used to add the suffix to the prefix's suffix list.
+
+Q2) Lookup searches for a prefix and creates one if requested. It will return pointers if present or created and NULL if none. It is used in the add and generate functions. 
+The add function uses it to check for the prefix if it's already there. If not, the prefix will be made. In the generate, lookup is used to find if the prefix is there from the build.
+
+Q3) 
+Prefix          |    suffix
+__________________________________             
+(null)(null)    |    It's
+(null)It's      |    a
+It's a          |    new
+a new           |    dawn
+new dawn        |    (null)
+
+Q4) 
+    a) "It's" - 3
+    b) "a" - 3
+    c) "new" - 3
+    d) "dawn" - 2
+
+Q5) It runs more quickly/faster and the programmer has more control over how they want to implement it.
+
+Q6) The programmer must do more work and write more code because they have to build their own hash tables and linked lists (it doesn't exist already in C). They also have to allocated and
+reclaim memory themselves.
+
+Q7) 
+void cleanStatetab() {
+    State *p = NULL;
+    State *hold = NULL;
+    for(int i = 0; i < NHASH; i++) {
+        for(p = statetab[i]; p != NULL; p = hold) {
+            hold = p->next;
+            free(p);
+        }
+    }
+}
+
+Q8) Yes, it works properly. The difficulty I had was figuring out that each array element held another data structure inside and I needed another for loop to traverse through the other data structure.
+
+Q9) You can put a marker in the table (like a variable) to "mark" that it's been freed so when the function goes to free it again, it reads what's in place of the freed string and doesn't
+free it again.
+
+Q10) The prefix is stored in a deque because it is more efficient. A deque is a double-ended queue that allows us to pop from the front as well as add to the end.
+
+Q11) A map serves as a dictionary.
+
+Q12) The satellite data is stored in vector strings.
+
+Q13) The advantages in implementing in C++ instead of C is that there will be less code and no memory allocation (automatically allocates memory). There is also built in data structures instead of needing to build your own like in C.
+
+Q14) In C++, you would need to container classes to simulate a hash table so it would run slower.
+
+Q15) The prefixes are stored in tuples.
+
+Q16) The dictionary built in data structure serves as the dictionary.
+
+Q17) The satellite data is stored in a python list, in each prefix.
+
+Q18) It would be easier to write the code in Python, but other than that, there are no other advantages.
+
+Q19) It's not as fast as C++ since Python stores everything in objects and it would take more memory

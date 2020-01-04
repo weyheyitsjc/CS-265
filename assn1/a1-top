@@ -1,0 +1,154 @@
+#!/bin/bash
+
+#Filename: a1-top
+#Purpose: Traverse through every subdirectory in the directory of choice and create a dir.json file in each with the contents of their README file.
+#Author: Jacy Yu / jy529
+#Date: 11/1/19
+
+if [ $# -eq 1 ] ; then
+    directory=${1}
+else
+    directory=$pwd
+fi  
+
+if [ -f ../${directory}/"dir.json" ] ; then
+    rm "dir.json"
+fi
+
+for d in $(find ${directory} -type d) ; do 
+    if [ -e "${d}/dir.json" ] ; then
+        rm "${d}/dir.json"
+    fi
+
+    touch "dir.json" ${d}/dir.json
+
+    echo '{' >> "${d}/dir.json"
+
+    if [ -e "${d}/README" ] ; then
+
+        #index
+        index=$(awk '{if ($1=="index") for (i=2; i<=NF; i++) print $i}' FS=":" "${d}/README")
+        echo -e $'\t"index" :' \"$index\"',' >> "${d}/dir.json"
+
+        #required files and directories
+        requiredFiles=()
+        requiredDirectories=()
+        otherFiles=()
+        otherDirectories=()
+
+        echo -e $'\t"required" : {' >> "${d}/dir.json"
+        required=$(awk '{if ($1=="required") for (i=2; i<=NF; i++) print $i}' FS=":" "${d}/README")
+        
+        #find required files and directories
+        for item in $required ; do
+            if [[ -f ${d}/${item} ]] ; then
+                requiredFiles+=(${item})
+            elif [[ -d ${d}/${item} ]] ; then
+                requiredDirectories+=(${item})
+            fi
+        done
+
+        #required files
+        echo -n $'\t\t\"files\": [' >> "${d}/dir.json"
+        for file in ${requiredFiles[@]} ; do
+            if [[ ${file} == ${requiredFiles[-1]} ]] ; then
+                echo -n ' '\"${file}\"' ' >> "${d}/dir.json"
+            else
+                echo -n ' '\"${file}\"',' >> "${d}/dir.json"
+            fi
+        done
+        echo -n '],' >> "${d}/dir.json"
+
+        #required directories
+        echo -n $'\n\t\t\"directories\": [' >> "${d}/dir.json"
+        for dir in ${requiredDirectories[@]} ; do
+            if [[ ${dir} == ${requiredDirectories[-1]} ]] ; then
+                echo -n ' '\"${dir}\"' ' >> "${d}/dir.json"
+            else
+                echo -n ' '\"${dir}\"',' >> "${d}/dir.json"
+            fi
+        done
+        echo -n ']' >> "${d}/dir.json"
+
+        echo -e '\n\t   },' >> "${d}/dir.json"
+
+        #other
+        #find other files
+        for x in $(ls ${d}) ; do
+            for item in ${required} ; do
+                if [[ "${x}" != "${item}" ]] ; then
+                    if [[ -f ${d}/${x} ]] ; then
+                        otherFiles+=(${x})
+                        break
+                    elif [[ -d ${d}/${x} ]] ; then
+                        otherDirectories+=(${x})
+                        break
+                    fi
+                fi
+            done
+        done
+
+        unset otherFiles[0]
+        echo -e $'\t"other" : {' >> "${d}/dir.json"
+
+        #other files
+        echo -n $'\t\t\"files\": [' >> "${d}/dir.json"
+        for file in ${otherFiles[@]} ; do
+            if [[ ${file} == ${otherFiles[-1]} ]] ; then
+                echo -n ' '\"${file}\"' ' >> "${d}/dir.json"
+            else
+                echo -n ' '\"${file}\"',' >> "${d}/dir.json"
+            fi
+        done
+        echo -n '],' >> "${d}/dir.json"
+
+        #other directories
+        echo -n $'\n\t\t\"directories\": [' >> "${d}/dir.json"
+        for dir in ${otherDirectories[@]} ; do
+            if [[ ${dir} == ${otherDirectories[-1]} ]] ; then
+                echo -n ' '\"${dir}\"' ' >> "${d}/dir.json"
+            else
+                echo -n ' '\"${dir}\"',' >> "${d}/dir.json"
+            fi
+        done
+        echo -n ']' >> "${d}/dir.json"
+
+        echo -e '\n\t   }' >> "${d}/dir.json"
+        echo -e '}' >> "${d}/dir.json"
+
+    else
+        #categorize all the files and directories in other
+        for x in $(ls ${d}) ; do
+            if [[ -f ${d}/${x} ]] ; then
+                otherFiles+=(${x})
+            elif [[ -d ${d}/${x} ]] ; then
+                otherDirectories+=(${x})
+            fi
+        done
+
+        echo -e $'\t"other" : {' >> "${d}/dir.json"
+        echo -n $'\t\t\"files\": [' >> "${d}/dir.json"
+        for file in ${otherFiles[@]} ; do
+            if [[ ${file} == ${otherFiles[-1]} ]] ; then
+                echo -n ' '\"${file}\"' ' >> "${d}/dir.json"
+            else
+                echo -n ' '\"${file}\"',' >> "${d}/dir.json"
+            fi
+        done
+        echo -n '],' >> "${d}/dir.json"
+
+        echo -n $'\n\t\t\"directories\": [' >> "${d}/dir.json"
+        for dir in ${otherDirectories[@]} ; do
+            if [[ ${dir} == ${otherDirectories[-1]} ]] ; then
+                echo -n ' '\"${dir}\"' ' >> "${d}/dir.json"
+            else
+                echo -n ' '\"${dir}\"',' >> "${d}/dir.json"
+            fi
+        done
+        echo -n ']' >> "${d}/dir.json"
+
+        echo -e '\n\t   }' >> "${d}/dir.json"
+        echo -e '}' >> "${d}/dir.json"
+
+    fi
+done

@@ -1,0 +1,55 @@
+Lab 6 Answer Sheet
+
+Q1)
+i. List - Linked list, each element contains data and a pointer to the next element in the linked list. The end points to null.
+ii. Stack - LIFO (last in first out) unordered data structure
+iii. Queue - FIFO (first in first out) data structure
+iv. Dictionary (Map) - contains a set of keys that associated with different values
+
+Q2) A binary search will complete at most log (base 2) n times because it shortens the data needed to be search by half at every step making the number of steps needed as the number of items divided by 2.
+
+Q3) At most, it will be n times because it could continue to go down the list of data until the right data is found and it could be the last item there which is n.
+
+Q4) If n is small, then a linear search could be prefered. Also if the data is unsorted because the only way to use a binary search would be to sort the data yourself otherwise a linear search would be preferred.
+
+Q5) Note: *-pivot points, |x|-pivot points that are in their place
+*84* 37 93 82 98 27 63 73 93 27 75 55 45 8
+*37* 8 82 45 27 63 73 55 27 75 |84| *93* 98 93
+*8* 27 27 |37| *45* 63 73 55 82 75 |84| |93| *93* 98
+|8| *27* |27| |37| |45| *63* 73 55 82 75 |84| |93| |93| *98*
+|8| |27| |27| |37| |45| 55 |63| 73 82 75 |84| |93| |93| |98|
+|8| |27| |27| |37| |45| *55* |63| *73* 82 75 |84| |93| |93| |98|
+|8| |27| |27| |37| |45| |55| |63| |73| *82* 75 |84| |93| |93| |98|
+|8| |27| |27| |37| |45| |55| |63| |73| *75* |82| |84| |93| |93| |98|
+|8| |27| |27| |37| |45| |55| |63| |73| |75| |82| |84| |93| |93| |98|
+
+Q6) l->"3"->"24"->"06"->NULL
+
+Q7) [13, [28, [24, [3, none]]]]
+
+Q8) The two sets of outputs are different because the pointers change values throughout the program. In the beginning, buffer is set to "on the footsteps of dawn" and then s is set to point to buffer so it is also the same value as buffer. After that, s gets "... who's never ever been born" added to it. 
+
+Q9) 
+0->NULL
+1->NULL
+2->NULL
+3->["Cos",86]->["Bob",38]
+4->["Jaga", 24]->["Kate",28]->["Nash",11]->["Vera",99]
+5->["Jesse",78]
+6->NULL
+
+Q10) 
+int find(char *key, int *p_ans) {
+    entry *node;
+    int h = hash(key);
+    
+    for(node = table[h]; node != NULL; node = node->next) {
+        if(strcmp(key, node->key) == 0) {
+            *p_ans = node->val;
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+}

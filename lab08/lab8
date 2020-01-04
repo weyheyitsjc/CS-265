@@ -1,0 +1,17 @@
+Lab 8 Answer Sheet
+
+Q1) 
+    i.If you hide the implementation details, then you can change them without affecting the client.
+    ii. By choosing a small orthongonal set of primitives, you make sure to only have the necessary set of behaviors to keep it easier to maintain. Also orthogonal would mean no overlapping functions. 
+    iii. By not reaching behind the user's back, you minimise the side effects, document any side effects, decrease coupling, and explicitly define what external services are needed. Don't do anything that the user is not aware of.
+    iv. By doing the same thing the same way everywhere, it means to use the same naming schemes, define arguments consistently, make sure it behaves similarly to associated interfaces.
+
+Q2) It can't handle more than 199 characters per line and assumes records have 20 fields at most. There is no provision for embedded quotes or commas since fields are only separated by commas and surrounding quotes.
+
+Q3) It removed the limits on characters per line and the number of fields. It also accounts for the commas and quotes that are embedded.
+
+Q4) It cannot parse more than one file at a time since the variables are static so only one instance of the variable exists.
+
+Q5) Yes, it wrapped the CSV fields in an object so you can parse more than one file concurrently (encapsulation). A problem that was added was a longer execution time.
+
+Q6, 7) Yes, we achieved data hiding which is in our guidelines. The client is unaware of the underlying details. There is also a few functions which keeps it simple.

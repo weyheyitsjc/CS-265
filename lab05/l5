@@ -1,0 +1,81 @@
+Lab 5 answer sheet
+
+Q1.1) The choice of names and values are bad because ch is vague for what is it as a value (character). Also, 0 is false and 1 is true. not_eof = FALSE is also
+bad coding because it would be a double negative and can create confusion for readers.
+
+1.2) Change function name to be more specific and active and add comments for clarity 
+		int isSmaller(char *s, char *t) {
+        	if (strcmp(s, t) < 1)
+            	return 1;
+        	else
+            	return 0;
+    	}
+
+1.3) I read it aloud and the variables are not clear and bad names.
+
+1.4) 
+	a) I can apply demorgan's law to simplify the expression.
+		if (c!='y' && c!='Y')
+	    	return;
+
+	b) If the length is greater than or equal to bufsize then it can only be equal to bufsize.
+		if (length >= BUFSIZE) 
+			length = BUFSIZE;
+
+	c) The fragment can be improved by turning it into an if statement.
+		if (flag == flag)
+			0;
+		else
+			1;
+
+	d) I can just set the variable to the condition instead of using the fragment and the variable quote will be 0 or 1 depending if it is false or true.
+		quote = (*line == '"');
+
+	e) I can just set the variable to the condition instead of using the fragment and the variable quote will be 0 or 1 depending if it is false or true.
+		bit = (val & 1);
+
+1.5) The order that the read function is called in insert is not guarenteed to be &val and then &ch. The program can do it in a different order.
+
+1.6) 1 1
+	 1 2
+	 2 1
+
+1.7) 
+  	a) Having a bunch of nested if-else statements is the same as or-ing all of them and returning 0 if they're all false. It can be simplified using demorgan's law.
+	  	if !((istty(stdin)) && (istty(stdout)) && (istty(stderr)))
+	 		return(0);
+
+	b) I can just return retval because the original function is checking for retval as success but returning retval regardless.
+		return (retval);
+
+	c) I changed it so that the for loop is idiomatic using only k and incrementing it. I incremented x inside of the loop instead.
+		for (k = 0; k < 5, k++) {
+			scanf("%lf", &dx);
+			x += dx;
+		}
+
+1.8) The variable count and the while loop can be shortened into a for loop that increments count. Total is
+	also not defined so the program might not run if it is 0 itself. True also cannot have parentheses around it.
+	for (int count = 0, count < total, count++) {
+		if (this.getName(count == nametable.userName())) {
+			return true;
+		}
+	}
+
+1.9) The c's used in the macro are not in parentheses and it is needed because of the multiple evaluation.
+
+1.10) I would change the definition names more clear and add variable types to the definition because each of the values currently could produce an 
+	error.
+	const float METER_PER_FT = 0.3048;
+	const float FT_PER_METER = 3.28084;
+	const float FT_PER_MILE = 5280.0;
+    const float KM_PER_MILE = 1.609344;
+    const float SQKM_PER_SQMI = 2.589988;
+
+1.11)
+	 1) Void doesn't return anything and the function uses it while the comment says it has a return value.
+	 2) The comment is inconsistent with the code because it is an or inside of the if statement and will test for MAX regardless if it is even or odd.
+	 3) The comment doesn't indicate anything. It says write a message, but there isn't a message or anything about what it is about.
+	 4) The comment is just a comment of what the code should do, but they are not implemented code.
+	 5) It is useless because the code following it already does what it says. It is not explaining anything that needs to be explained.
+	 6) The comment is misleading because it adding two but increment means to add by one.

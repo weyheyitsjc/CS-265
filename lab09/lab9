@@ -1,0 +1,17 @@
+Lab 9 answer sheet
+
+Q1.1) A file "core" was created after bug3 was compiled.
+
+Q1.2) It was bombed in the inTable() function.
+
+Q1.3)
+    c) In the main function's while loop, the numLines was incremented before it was used. It caused numLines be out of range of the array size. I fixed it by moving the increment of 
+        numLines to the end of the while loop after it was used in st[ numLines ] = strdup( buff ).
+    e) The T_MINUS case was subtracting the second element of the stack from the first element of the stack (element 1 - element 2), subtracting by LIFO. I fixed it so the second element 
+        of the stack subtracted the first element of the stack (element 2 - element 1), subtracting by FIFO.
+    f) The problem is that the quicksort only sorted the left side of the pivot. You would put swap(v,0,rand() % n); to change the pivot point to v[0] (the first position). You need assert 
+        ((last >= 0) && (last < n)); to check if it was implemented properly.
+
+Q1.4) The compiler can only catch syntax errors not logic errors. To the compiler, it is correct, but it isn't.
+
+Q1.5) It would be a error because qsort only accepts pointers to object being sorted (char) and strcmp accepts simple pointers to char.

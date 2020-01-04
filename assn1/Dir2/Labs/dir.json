@@ -1,0 +1,11 @@
+{
+	"index" : "labs.html",
+	"required" : {
+		"files": [],
+		"directories": []
+	   },
+	"other" : {
+		"files": [],
+		"directories": []
+	   }
+}
